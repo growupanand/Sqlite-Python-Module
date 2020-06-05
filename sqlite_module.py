@@ -33,8 +33,12 @@ class database:
         self.table_name = table_name
         self.table_data = table_data
         for item in self.table_data:
-            self.conn.execute("INSERT INTO " + self.table_name + " (" + ', '.join(item.keys()) + ") VALUES (" + str(', '.join("'" + i + "'" for i in item.values())) + ")")
-            self.conn.commit()
+            try:
+                self.conn.execute("INSERT INTO " + self.table_name + " (" + ', '.join(item.keys()) + ") VALUES (" + str(', '.join("'" + i + "'" for i in item.values())) + ")")
+                self.conn.commit()
+                return True
+            except sqlite3.Error as e:
+                return e
 
     def select_data(self, table_name, colums, condition=None):
         self.table_name = table_name
